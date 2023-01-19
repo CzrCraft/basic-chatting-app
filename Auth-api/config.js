@@ -6,10 +6,6 @@ module.exports = {
     },
     jwt: {
         secret: '073EE8894569835F62363485E444620C3A2C21A5B6F9DC2BC3F75726E6EC6342', //secret key for jwt auth
-        options: {
-            expiresIn: '90 days',
-            //... https://github.com/auth0/node-jsonwebtoken#usage
-        },
     },
     winston: {
         writeToConsole: true, //enable writing to console

@@ -3,12 +3,18 @@ import 'package:flutter_messenger/AppPages/Auth-files/registerPage.dart';
 import 'package:flutter_messenger/AppPages/Auth-files/loginPage.dart';
 import 'package:flutter_messenger/Error-handler.dart';
 import 'package:flutter_messenger/AppPages/homePage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   runApp(const MyApp());
 }
+String serverIp = "http://10.0.2.2:3000/";
+class PrimitiveWrapper {
+  var value;
+  PrimitiveWrapper(this.value);
+}
 
 String JWTPersonalKey = "";
+String UserID = "";
 var PageManagerKey = GlobalKey<_PageManagerState>();
 
 class MyApp extends StatelessWidget {

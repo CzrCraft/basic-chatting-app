@@ -45,5 +45,5 @@ publicRoutes.post('/user/login', checkSchema({
         }
     }
 }), userController.login);
-
+publicRoutes.post("/user/getUserID", userController.getUserID);
 module.exports = publicRoutes;

@@ -18,7 +18,7 @@ app.use(expressValidator({errorFormatter: config.errorFormatting}));
 app.use('/', express.static(path.resolve(__dirname, '../public'))); //serve static files
 app.use('/', require('./routes/index'));
 
-app.listen(config.port, () => {
+app.listen(config.port, '0.0.0.0', () => {
     utils.info('App listening on port ' + config.port);
     utils.info('http://localhost:' + config.port);
 });

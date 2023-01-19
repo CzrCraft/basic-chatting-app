@@ -44,13 +44,13 @@ module.exports.login = async (req, res) => {
             user,
             token,
         });
-        print(`User "${email}" logged in!`);
+        utils.info(email + " logged in!");
     } catch(error) {
-        res.json({success: false, error});
         utils.info("Login failed");
         utils.info(error);
         utils.info(email);
         utils.info(password);
+        res.json({success: false, error});
     }
 
 };
@@ -117,3 +117,29 @@ module.exports.delete = async (req, res) => {
         res.json({success: false, error});
     }
 };
+
+
+module.exports.getUserID = async(req, res) =>{
+    /*
+    We could use res.locals to serve the user data but when the data changes it will serve the old data from the JWT token
+     */
+    const {email} = req.body;
+    try {
+        var reqDocument;
+        var user = await User.findOne({email: email}).exec().then(function(result, err){console.log(result); reqDocument=result});
+        res.json({success:true, _id: reqDocument._id}); 
+        // utils.info(reqDocument["email"]);
+        //res.json({success: true, _id: user["_id"]});        
+    } catch(error) {
+        utils.error(error);
+        res.json({success: false});
+    }
+}
+
+module.exports.dummy = async(req, res) =>{
+    try {
+        res.json({success: true});        
+    } catch(error) {
+        utils.error(error);
+    }
+}

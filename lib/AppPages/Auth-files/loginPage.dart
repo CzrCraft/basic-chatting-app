@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_messenger/main.dart';
 import 'authController.dart';
 import 'package:flutter_messenger/Error-handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,10 +15,50 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+String errorMessage = "";
+void sharedPrefrencesHandler(bool writeNewKey) async {
+  if (writeNewKey == false) {
+    final prefs = await SharedPreferences.getInstance();
+    final String? jwtKey = "a"; //await prefs.getString('JWT_personal_token');
+    final String? personalUserID = await prefs.getString('Personal_account_ID');
+    final AuthController keyDummyCheck = await new AuthController();
+    print(jwtKey);
+    keyDummyCheck.keyDummyCheck(jwtKey.toString(), (bool succes, String error) {
+      if (succes) {
+        JWTPersonalKey = jwtKey.toString();
+        UserID = personalUserID.toString();
+        print("UserID: " + UserID);
+        PageManagerKey.currentState?.ChangePage("homepage");
+      } else {
+        errorMessage = error;
+        PageManagerKey.currentState?.ChangePage("loginpage");
+      }
+    });
+  } else {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('JWT_personal_token', JWTPersonalKey);
+    await prefs.setString("Personal_account_ID", UserID);
+  }
+}
+
+void LogInReturnFunction(String token, bool Success, String userID) {
+  print(Success);
+  if (Success) {
+    JWTPersonalKey = token;
+    UserID = userID;
+    sharedPrefrencesHandler(true);
+    PageManagerKey.currentState?.ChangePage("homepage");
+  } else {
+    print(token);
+    showDialogue("Uh oh", token, DialogType.error);
+    print(token);
+  }
+}
+
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
+  var bla = sharedPrefrencesHandler(false);
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: () async {
@@ -111,20 +152,9 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17.0),
               ),
             ),
+            Text(errorMessage),
           ],
         ),
         backgroundColor: Color.fromARGB(255, 69, 69, 69),
       ));
-}
-
-void LogInReturnFunction() {
-  print(AuthSucces);
-  if (AuthSucces) {
-    JWTPersonalKey = AuthContrltempVar;
-    PageManagerKey.currentState?.ChangePage("homepage");
-  } else {
-    print(AuthContrltempVar);
-    showDialogue("Uh oh", AuthContrlError, DialogType.error);
-    print(AuthContrlError);
-  }
 }

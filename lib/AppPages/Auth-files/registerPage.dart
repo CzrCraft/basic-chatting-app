@@ -159,12 +159,12 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-void RegisterReturnFunction() {
-  if (AuthSucces == true) {
+void RegisterReturnFunction(String token, bool Success) {
+  if (Success == true) {
     showDialogue(
         "Success", "Succesfully created your account", DialogType.success);
     PageManagerKey.currentState?.ChangePage("loginpage");
   } else {
-    showDialogue("Uh oh", AuthContrlError, DialogType.error);
+    showDialogue("Uh oh", token, DialogType.error);
   }
 }
